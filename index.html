@@ -7,7 +7,53 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app">
+    <!-- ===== ЭКРАН АВТОРИЗАЦИИ ===== -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <svg viewBox="0 0 100 100" width="64" height="64">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#g)" stroke-width="6"/>
+                    <path d="M35 50 L45 60 L70 35" stroke="url(#g)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff6fd8"/>
+                            <stop offset="100%" stop-color="#6f8cff"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>✦ VIBE</h1>
+                <p>Мессенджер 2026</p>
+            </div>
+
+            <!-- Вход -->
+            <div id="loginForm" class="auth-form">
+                <h2>Вход</h2>
+                <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
+                <input type="password" id="loginPassword" placeholder="Пароль" autocomplete="current-password">
+                <button id="loginBtn" class="auth-btn">Войти</button>
+                <p class="auth-switch">
+                    Нет аккаунта? <span id="showRegister">Зарегистрироваться</span>
+                </p>
+                <div id="loginError" class="auth-error"></div>
+            </div>
+
+            <!-- Регистрация -->
+            <div id="registerForm" class="auth-form" style="display:none;">
+                <h2>Регистрация</h2>
+                <input type="text" id="registerUsername" placeholder="Имя пользователя">
+                <input type="email" id="registerEmail" placeholder="Email" autocomplete="email">
+                <input type="password" id="registerPassword" placeholder="Пароль (мин. 6 символов)" autocomplete="new-password">
+                <button id="registerBtn" class="auth-btn">Создать аккаунт</button>
+                <p class="auth-switch">
+                    Уже есть аккаунт? <span id="showLogin">Войти</span>
+                </p>
+                <div id="registerError" class="auth-error"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ ===== -->
+    <div id="appScreen" class="app" style="display:none;">
         <!-- Боковая панель -->
         <aside class="sidebar">
             <div class="logo">
@@ -24,51 +70,30 @@
                 <span>VIBE</span>
             </div>
 
+            <div class="connection-status" id="connectionStatus">
+                <span class="dot"></span>
+                <span>Подключено</span>
+            </div>
+
             <div class="search-box">
                 <input type="text" placeholder="Поиск..." id="searchInput">
             </div>
 
             <div class="contacts" id="contactsList">
-                <div class="contact active" data-contact="Анна">
-                    <div class="avatar" style="background: #ff6fd8;">А</div>
-                    <div class="info">
-                        <div class="name">Анна</div>
-                        <div class="last-msg">Привет!</div>
-                    </div>
-                    <div class="time">12:30</div>
-                </div>
-                <div class="contact" data-contact="Максим">
-                    <div class="avatar" style="background: #6f8cff;">М</div>
-                    <div class="info">
-                        <div class="name">Максим</div>
-                        <div class="last-msg">Ок, договорились</div>
-                    </div>
-                    <div class="time">11:15</div>
-                </div>
-                <div class="contact" data-contact="Елена">
-                    <div class="avatar" style="background: #ffb86b;">Е</div>
-                    <div class="info">
-                        <div class="name">Елена</div>
-                        <div class="last-msg">Спасибо!</div>
-                    </div>
-                    <div class="time">Вчера</div>
-                </div>
-                <div class="contact" data-contact="Команда">
-                    <div class="avatar" style="background: #6fcf97;">К</div>
-                    <div class="info">
-                        <div class="name">Команда</div>
-                        <div class="last-msg">Встреча в 15:00</div>
-                    </div>
-                    <div class="time">Вчера</div>
+                <!-- Контакты будут добавляться динамически -->
+                <div class="no-contacts">
+                    <span>👋 Начни общение</span>
+                    <span class="sub">Добавь контакты через Firebase</span>
                 </div>
             </div>
 
             <div class="user-profile">
-                <div class="avatar" style="background: #a06bff;">Я</div>
+                <div class="avatar" id="userAvatar" style="background: #a06bff;">Я</div>
                 <div class="info">
-                    <div class="name">Ты</div>
-                    <div class="status">Онлайн</div>
+                    <div class="name" id="userName">Пользователь</div>
+                    <div class="status" id="userEmail">email@example.com</div>
                 </div>
+                <button id="logoutBtn" class="logout-btn">🚪</button>
             </div>
         </aside>
 
@@ -85,12 +110,14 @@
                 <div class="chat-actions">
                     <button>📞</button>
                     <button>📹</button>
-                    <button>⚙️</button>
+                    <button id="clearChatBtn">🗑️</button>
                 </div>
             </header>
 
             <div class="messages" id="messagesContainer">
-                <!-- Сообщения будут добавляться сюда -->
+                <div class="loading-messages">
+                    <span>⏳ Загрузка сообщений...</span>
+                </div>
             </div>
 
             <div class="message-input">
@@ -101,6 +128,15 @@
         </main>
     </div>
 
+    <!-- Firebase SDK (Compat для простоты) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- Конфигурация Firebase -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- Основной скрипт -->
     <script src="script.js"></script>
 </body>
 </html>
