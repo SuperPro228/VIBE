@@ -8,7 +8,7 @@
 
 body {
     height: 100vh;
-    background: radial-gradient(circle at 20% 30%, #1a1a2e, #0f0f1a);
+    background: #0a0a0a;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,17 +25,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at 20% 30%, #1a1a2e, #0f0f1a);
+    background: #0a0a0a;
     z-index: 1000;
 }
 
 .auth-container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    background: #141414;
     border-radius: 48px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
     padding: 48px 40px;
     width: 420px;
     max-width: 90%;
@@ -56,7 +54,7 @@ body {
 }
 
 .auth-logo p {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.25);
     font-size: 14px;
     margin-top: 4px;
 }
@@ -72,8 +70,8 @@ body {
     width: 100%;
     padding: 14px 18px;
     border-radius: 30px;
-    border: none;
-    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     color: #fff;
     font-size: 15px;
     outline: none;
@@ -82,12 +80,12 @@ body {
 }
 
 .auth-form input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.2);
 }
 
 .auth-form input:focus {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 2px rgba(111, 140, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(111, 140, 255, 0.3);
 }
 
 .auth-btn {
@@ -106,15 +104,21 @@ body {
 
 .auth-btn:hover {
     transform: scale(1.02);
-    box-shadow: 0 0 30px rgba(111, 140, 255, 0.3);
+    box-shadow: 0 0 30px rgba(111, 140, 255, 0.2);
 }
 
 .auth-btn:active {
     transform: scale(0.98);
 }
 
+.auth-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .auth-switch {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
     text-align: center;
     margin-top: 16px;
     font-size: 14px;
@@ -145,12 +149,10 @@ body {
     max-width: 100%;
     height: 90vh;
     max-height: 800px;
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    background: #0d0d0d;
     border-radius: 48px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
     display: flex;
     overflow: hidden;
 }
@@ -159,7 +161,7 @@ body {
 .sidebar {
     width: 320px;
     min-width: 260px;
-    background: rgba(0, 0, 0, 0.3);
+    background: #0a0a0a;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     flex-direction: column;
@@ -183,12 +185,12 @@ body {
     align-items: center;
     gap: 8px;
     padding: 8px 14px;
-    background: rgba(111, 207, 151, 0.1);
+    background: rgba(111, 207, 151, 0.08);
     border-radius: 30px;
     margin-bottom: 16px;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(111, 207, 151, 0.15);
+    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(111, 207, 151, 0.08);
 }
 
 .connection-status .dot {
@@ -218,8 +220,8 @@ body {
     width: 100%;
     padding: 12px 18px;
     border-radius: 30px;
-    border: none;
-    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     color: #fff;
     font-size: 14px;
     outline: none;
@@ -227,12 +229,12 @@ body {
 }
 
 .search-box input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.2);
 }
 
 .search-box input:focus {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 2px rgba(111, 140, 255, 0.3);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(111, 140, 255, 0.2);
 }
 
 .contacts {
@@ -246,12 +248,16 @@ body {
 }
 
 .contacts::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
 
+.contacts::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 .no-contacts {
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.15);
     text-align: center;
     padding: 40px 20px;
     font-size: 15px;
@@ -261,7 +267,7 @@ body {
     display: block;
     font-size: 13px;
     margin-top: 8px;
-    color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.08);
 }
 
 .contact {
@@ -277,12 +283,12 @@ body {
 }
 
 .contact:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .contact.active {
-    background: rgba(111, 140, 255, 0.15);
-    border: 1px solid rgba(111, 140, 255, 0.2);
+    background: rgba(111, 140, 255, 0.08);
+    border: 1px solid rgba(111, 140, 255, 0.1);
 }
 
 .contact .avatar {
@@ -310,7 +316,7 @@ body {
 }
 
 .contact .last-msg {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.3);
     font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
@@ -318,7 +324,7 @@ body {
 }
 
 .contact .time {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.2);
     font-size: 12px;
     flex-shrink: 0;
 }
@@ -357,7 +363,7 @@ body {
 }
 
 .user-profile .info .status {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.25);
     font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
@@ -365,9 +371,9 @@ body {
 }
 
 .logout-btn {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.3);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -377,7 +383,7 @@ body {
 }
 
 .logout-btn:hover {
-    background: rgba(255, 107, 107, 0.2);
+    background: rgba(255, 107, 107, 0.15);
     color: #ff6b6b;
 }
 
@@ -386,7 +392,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0.15);
+    background: #0a0a0a;
 }
 
 .chat-header {
@@ -423,7 +429,7 @@ body {
 }
 
 .chat-user .info .status {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.25);
     font-size: 13px;
 }
 
@@ -433,9 +439,9 @@ body {
 }
 
 .chat-actions button {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     border: none;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -445,7 +451,7 @@ body {
 }
 
 .chat-actions button:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
     color: #fff;
 }
 
@@ -464,12 +470,30 @@ body {
 }
 
 .messages::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 10px;
 }
 
+.messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.empty-chat {
+    color: rgba(255, 255, 255, 0.12);
+    text-align: center;
+    margin: auto;
+    font-size: 15px;
+}
+
+.empty-chat .sub {
+    display: block;
+    font-size: 13px;
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.06);
+}
+
 .loading-messages {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.2);
     text-align: center;
     margin: auto;
     font-size: 14px;
@@ -499,14 +523,14 @@ body {
 
 .message.received {
     align-self: flex-start;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
     color: #e0e0e0;
     border-bottom-left-radius: 6px;
 }
 
 .message .time {
     font-size: 11px;
-    opacity: 0.5;
+    opacity: 0.4;
     margin-top: 4px;
     display: block;
 }
@@ -524,8 +548,8 @@ body {
     flex: 1;
     padding: 12px 18px;
     border-radius: 30px;
-    border: none;
-    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     color: #fff;
     font-size: 15px;
     outline: none;
@@ -533,18 +557,18 @@ body {
 }
 
 .message-input input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.2);
 }
 
 .message-input input:focus {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 2px rgba(111, 140, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(111, 140, 255, 0.2);
 }
 
 .message-input button {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     border: none;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.4);
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -557,7 +581,7 @@ body {
 }
 
 .message-input button:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
     color: #fff;
 }
 
@@ -568,7 +592,7 @@ body {
 
 #sendBtn:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(111, 140, 255, 0.3);
+    box-shadow: 0 0 20px rgba(111, 140, 255, 0.15);
 }
 
 /* ===== АДАПТИВ ===== */
@@ -624,6 +648,7 @@ body {
 
     .auth-container {
         padding: 32px 24px;
+        border-radius: 32px;
     }
 
     .chat-header {
@@ -676,7 +701,7 @@ body {
 
     .auth-container {
         padding: 24px 16px;
-        border-radius: 32px;
+        border-radius: 24px;
     }
 
     .auth-logo h1 {
