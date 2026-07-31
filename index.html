@@ -80,7 +80,6 @@
             </div>
 
             <div class="contacts" id="contactsList">
-                <!-- Контакты будут добавляться динамически -->
                 <div class="no-contacts">
                     <span>👋 Начни общение</span>
                     <span class="sub">Добавь контакты через Firebase</span>
@@ -103,8 +102,8 @@
                 <div class="chat-user">
                     <div class="avatar" style="background: #ff6fd8;" id="chatAvatar">А</div>
                     <div class="info">
-                        <div class="name" id="chatName">Анна</div>
-                        <div class="status" id="chatStatus">онлайн</div>
+                        <div class="name" id="chatName">Выбери чат</div>
+                        <div class="status" id="chatStatus">выбери контакт</div>
                     </div>
                 </div>
                 <div class="chat-actions">
@@ -115,8 +114,9 @@
             </header>
 
             <div class="messages" id="messagesContainer">
-                <div class="loading-messages">
-                    <span>⏳ Загрузка сообщений...</span>
+                <div class="empty-chat">
+                    <span>💬 Выбери контакт</span>
+                    <span class="sub">Начни общение с друзьями</span>
                 </div>
             </div>
 
@@ -128,7 +128,7 @@
         </main>
     </div>
 
-    <!-- Firebase SDK (Compat для простоты) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
