@@ -238,4 +238,258 @@ function loadContacts() {
         if (data) {
             Object.keys(data).forEach(function(contactId) {
                 const contact = data[contactId];
-                if (contact
+                if (contactId !== currentUser.uid) {
+                    contactsCache.push({
+                        id: contactId,
+                        ...contact
+                    });
+                }
+            });
+        }
+        
+        renderContacts();
+    });
+}
+
+function renderContacts() {
+    contactsList.innerHTML = '';
+    
+    if (contactsCache.length === 0) {
+        contactsList.innerHTML = `
+            <div class="no-contacts">
+                <span>👋 Нет контактов</span>
+                <span class="sub">Добавьте друзей через Firebase</span>
+            </div>
+        `;
+        return;
+    }
+    
+    contactsCache.forEach(function(contact) {
+        const div = document.createElement('div');
+        div.className = 'contact' + (currentContact === contact.id ? ' active' : '');
+        div.dataset.contact = contact.id;
+        
+        const initial = (contact.username || 'U')[0].toUpperCase();
+        const colors = ['#ff6fd8', '#6f8cff', '#ffb86b', '#6fcf97', '#a06bff', '#ff6b6b'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        div.innerHTML = `
+            <div class="avatar" style="background: ${color}">${initial}</div>
+            <div class="info">
+                <div class="name">${contact.username || 'Пользователь'}</div>
+                <div class="last-msg">${contact.lastMsg || 'Напиши сообщение'}</div>
+            </div>
+            <div class="time">${contact.lastTime || ''}</div>
+        `;
+        
+        div.addEventListener('click', function() {
+            if (contact.id !== currentContact) {
+                switchContact(contact.id);
+            }
+        });
+        
+        contactsList.appendChild(div);
+    });
+}
+
+// ===== ПЕРЕКЛЮЧЕНИЕ КОНТАКТА =====
+
+function switchContact(contactId) {
+    currentContact = contactId;
+    
+    // Находим контакт
+    const contact = contactsCache.find(function(c) { return c.id === contactId; });
+    if (!contact) return;
+    
+    // Обновляем шапку
+    chatName.textContent = contact.username || 'Пользователь';
+    chatAvatar.textContent = (contact.username || 'U')[0].toUpperCase();
+    chatStatus.textContent = 'онлайн';
+    
+    // Обновляем активный контакт
+    document.querySelectorAll('.contact').forEach(function(el) {
+        el.classList.remove('active');
+        if (el.dataset.contact === contactId) {
+            el.classList.add('active');
+        }
+    });
+    
+    // Загружаем сообщения
+    loadMessages(contactId);
+}
+
+// ===== ЗАГРУЗКА СООБЩЕНИЙ =====
+
+function loadMessages(contactId) {
+    const chatRef = database.ref(`chats/${currentUser.uid}/${contactId}`);
+    
+    // Отписываемся от старого слушателя
+    if (contactListeners[contactId]) {
+        contactListeners[contactId]();
+        delete contactListeners[contactId];
+    }
+    
+    messagesContainer.innerHTML = `
+        <div class="loading-messages">⏳ Загрузка сообщений...</div>
+    `;
+    
+    // Слушаем новые сообщения
+    const listener = chatRef.on('value', function(snapshot) {
+        const data = snapshot.val();
+        
+        if (data && data.messages) {
+            messagesCache[contactId] = data.messages;
+        } else {
+            messagesCache[contactId] = [];
+        }
+        
+        renderMessages(contactId);
+        updateContactLastMessage(contactId);
+    });
+    
+    contactListeners[contactId] = function() {
+        chatRef.off('value', listener);
+    };
+}
+
+function renderMessages(contactId) {
+    const messages = messagesCache[contactId] || [];
+    messagesContainer.innerHTML = '';
+    
+    if (messages.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-chat';
+        empty.innerHTML = `
+            <span>💬 Начни общение!</span>
+            <span class="sub">Напиши первое сообщение</span>
+        `;
+        messagesContainer.appendChild(empty);
+        return;
+    }
+    
+    messages.forEach(function(msg) {
+        const div = document.createElement('div');
+        div.className = 'message ' + (msg.senderId === currentUser.uid ? 'sent' : 'received');
+        div.innerHTML = `
+            ${msg.text}
+            <span class="time">${msg.time || ''}</span>
+        `;
+        messagesContainer.appendChild(div);
+    });
+    
+    setTimeout(function() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 50);
+}
+
+function updateContactLastMessage(contactId) {
+    const messages = messagesCache[contactId] || [];
+    if (messages.length === 0) return;
+    
+    const lastMsg = messages[messages.length - 1];
+    
+    const contactEl = document.querySelector('.contact[data-contact="' + contactId + '"]');
+    if (contactEl) {
+        const lastMsgEl = contactEl.querySelector('.last-msg');
+        const timeEl = contactEl.querySelector('.time');
+        if (lastMsgEl) lastMsgEl.textContent = lastMsg.text;
+        if (timeEl) timeEl.textContent = lastMsg.time;
+    }
+    
+    // Обновляем в базе данных
+    const contact = contactsCache.find(function(c) { return c.id === contactId; });
+    if (contact) {
+        database.ref('contacts/' + contactId).update({
+            lastMsg: lastMsg.text,
+            lastTime: lastMsg.time
+        });
+    }
+}
+
+// ===== ОТПРАВКА СООБЩЕНИЯ =====
+
+async function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text || !currentContact) return;
+    
+    const now = new Date();
+    const time = now.getHours().toString().padStart(2, '0') + ':' + 
+                 now.getMinutes().toString().padStart(2, '0');
+    
+    const messageData = {
+        senderId: currentUser.uid,
+        text: text,
+        time: time,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+    
+    try {
+        // Отправляем в чат текущего пользователя
+        const chatRef = database.ref('chats/' + currentUser.uid + '/' + currentContact);
+        const messages = messagesCache[currentContact] || [];
+        messages.push(messageData);
+        await chatRef.update({ messages: messages });
+        
+        // Отправляем в чат собеседника
+        const otherChatRef = database.ref('chats/' + currentContact + '/' + currentUser.uid);
+        const otherMessages = messagesCache[currentContact] || [];
+        otherMessages.push(messageData);
+        await otherChatRef.update({ messages: otherMessages });
+        
+        messageInput.value = '';
+    } catch (error) {
+        console.error('Ошибка отправки:', error);
+    }
+}
+
+// ===== ОЧИСТКА ЧАТА =====
+
+clearChatBtn.addEventListener('click', async function() {
+    if (!currentContact) return;
+    if (!confirm('Очистить всю историю чата?')) return;
+    
+    try {
+        await database.ref('chats/' + currentUser.uid + '/' + currentContact).remove();
+        await database.ref('chats/' + currentContact + '/' + currentUser.uid).remove();
+        messagesCache[currentContact] = [];
+        renderMessages(currentContact);
+    } catch (error) {
+        console.error('Ошибка очистки:', error);
+    }
+});
+
+// ===== ПОИСК КОНТАКТОВ =====
+
+searchInput.addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    const contacts = document.querySelectorAll('.contact');
+    
+    contacts.forEach(function(contact) {
+        const name = contact.querySelector('.name').textContent.toLowerCase();
+        contact.style.display = name.includes(query) ? 'flex' : 'none';
+    });
+});
+
+// ===== ЭМОДЗИ =====
+
+document.getElementById('emojiBtn').addEventListener('click', function() {
+    const emojis = ['😊', '❤️', '🔥', '✨', '👍', '😂', '🎉', '💪', '👋', '🎯', '⭐', '🌈'];
+    const random = emojis[Math.floor(Math.random() * emojis.length)];
+    messageInput.value += random;
+    messageInput.focus();
+});
+
+// ===== ОТПРАВКА ПО ENTER =====
+
+messageInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// ===== ОТПРАВКА ПО КЛИКУ =====
+
+sendBtn.addEventListener('click', sendMessage);
+
+console.log('✦ VIBE мессенджер загружен!');
