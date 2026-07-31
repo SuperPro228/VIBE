@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✦ VIBE — мессенджер 2026</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Боковая панель -->
+        <aside class="sidebar">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" width="42" height="42">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#g)" stroke-width="6"/>
+                    <path d="M35 50 L45 60 L70 35" stroke="url(#g)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff6fd8"/>
+                            <stop offset="100%" stop-color="#6f8cff"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>VIBE</span>
+            </div>
+
+            <div class="search-box">
+                <input type="text" placeholder="Поиск..." id="searchInput">
+            </div>
+
+            <div class="contacts" id="contactsList">
+                <div class="contact active" data-contact="Анна">
+                    <div class="avatar" style="background: #ff6fd8;">А</div>
+                    <div class="info">
+                        <div class="name">Анна</div>
+                        <div class="last-msg">Привет!</div>
+                    </div>
+                    <div class="time">12:30</div>
+                </div>
+                <div class="contact" data-contact="Максим">
+                    <div class="avatar" style="background: #6f8cff;">М</div>
+                    <div class="info">
+                        <div class="name">Максим</div>
+                        <div class="last-msg">Ок, договорились</div>
+                    </div>
+                    <div class="time">11:15</div>
+                </div>
+                <div class="contact" data-contact="Елена">
+                    <div class="avatar" style="background: #ffb86b;">Е</div>
+                    <div class="info">
+                        <div class="name">Елена</div>
+                        <div class="last-msg">Спасибо!</div>
+                    </div>
+                    <div class="time">Вчера</div>
+                </div>
+                <div class="contact" data-contact="Команда">
+                    <div class="avatar" style="background: #6fcf97;">К</div>
+                    <div class="info">
+                        <div class="name">Команда</div>
+                        <div class="last-msg">Встреча в 15:00</div>
+                    </div>
+                    <div class="time">Вчера</div>
+                </div>
+            </div>
+
+            <div class="user-profile">
+                <div class="avatar" style="background: #a06bff;">Я</div>
+                <div class="info">
+                    <div class="name">Ты</div>
+                    <div class="status">Онлайн</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Основной чат -->
+        <main class="chat">
+            <header class="chat-header">
+                <div class="chat-user">
+                    <div class="avatar" style="background: #ff6fd8;" id="chatAvatar">А</div>
+                    <div class="info">
+                        <div class="name" id="chatName">Анна</div>
+                        <div class="status" id="chatStatus">онлайн</div>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button>📞</button>
+                    <button>📹</button>
+                    <button>⚙️</button>
+                </div>
+            </header>
+
+            <div class="messages" id="messagesContainer">
+                <!-- Сообщения будут добавляться сюда -->
+            </div>
+
+            <div class="message-input">
+                <button id="emojiBtn">😊</button>
+                <input type="text" id="messageInput" placeholder="Напиши сообщение..." autofocus>
+                <button id="sendBtn">➤</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
